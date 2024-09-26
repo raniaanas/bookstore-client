@@ -10,6 +10,7 @@ import { routes } from './app.routes';
 import { BookListComponent } from './components/book-list/book-list.component';
 import { BookDetailComponent } from './components/book-detail/book-detail.component';
 import { BookFormComponent } from './components/book-form/book-form.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import { BookFormComponent } from './components/book-form/book-form.component';
     BookDetailComponent,
     BookFormComponent,
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

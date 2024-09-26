@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';  // Import HttpClientModule
+import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';  // Import CurrencyPipe and DatePipe
+import { RouterModule } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { Book } from '../../models/book';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-book-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, HttpClientModule],  // Add HttpClientModule here
+  imports: [CommonModule, RouterModule, CurrencyPipe, DatePipe],  // Add CurrencyPipe and DatePipe to imports array
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
 })
@@ -21,5 +20,14 @@ export class BookListComponent implements OnInit {
     this.bookService.getBooks().subscribe((data: Book[]) => {
       this.books = data;
     });
+  }
+
+  deleteBook(id: number): void {
+    if (confirm('Are you sure you want to delete this book?')) {
+      this.bookService.deleteBook(id).subscribe(() => {
+        // Remove the deleted book from the list
+        this.books = this.books.filter(book => book.id !== id);
+      });
+    }
   }
 }

@@ -1,20 +1,41 @@
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold mb-4">Book List</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let book of books" class="p-6 border rounded shadow-sm hover:shadow-md">
-        <h2 class="text-xl font-semibold">{{ book.title }}</h2>
-        <p class="text-sm text-gray-600">by {{ book.author }}</p>
-        <p class="mt-2 text-green-700 font-medium">{{ book.price | currency }}</p>
-        <p class="text-sm text-gray-500">Published: {{ book.publicationDate | date }}</p>
-        <a [routerLink]="['/book', book.id]" class="mt-4 inline-block bg-blue-600 text-white py-1 px-3 rounded hover:bg-blue-700">
-          View Details
-        </a>
-      </div>
-    </div>
-    <div class="mt-8">
-      <a routerLink="/add-book" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
-        Add New Book
-      </a>
-    </div>
+  <h1 class="text-3xl font-bold mb-8">Book List</h1>
+
+  <!-- Add Book Button -->
+  <div class="mb-4 text-right">
+    <a [routerLink]="['/add-book']" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+      + Add New Book
+    </a>
   </div>
-  
+
+  <!-- Table for Books -->
+  <table class="min-w-full bg-white shadow-lg rounded-lg">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 bg-gray-200 text-left">Title</th>
+        <th class="py-2 px-4 bg-gray-200 text-left">Author</th>
+        <th class="py-2 px-4 bg-gray-200 text-left">Price</th>
+        <th class="py-2 px-4 bg-gray-200 text-left">Published Date</th>
+        <th class="py-2 px-4 bg-gray-200 text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books" class="border-t">
+        <td class="py-2 px-4">{{ book.title }}</td>
+        <td class="py-2 px-4">{{ book.author }}</td>
+        <td class="py-2 px-4">{{ book.price | currency }}</td>
+        <td class="py-2 px-4">{{ book.publicationDate | date }}</td>
+        <td class="py-2 px-4 text-center">
+          <!-- Edit Button -->
+          <a [routerLink]="['/edit-book', book.id]" class="text-blue-600 hover:text-blue-800">
+            <i class="fas fa-edit"></i> Edit
+          </a>
+          <!-- Delete Button -->
+          <button (click)="deleteBook(book.id)" class="ml-4 text-red-600 hover:text-red-800">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
