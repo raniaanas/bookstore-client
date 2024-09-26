@@ -1,0 +1,32 @@
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { AppComponent } from './app.component';
+import { routes } from './app.routes';
+
+// Import standalone components
+import { BookListComponent } from './components/book-list/book-list.component';
+import { BookDetailComponent } from './components/book-detail/book-detail.component';
+import { BookFormComponent } from './components/book-form/book-form.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,  // AppComponent is not standalone, so it stays in declarations
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    RouterModule.forRoot(routes),
+
+    // Import standalone components here
+    BookListComponent,
+    BookDetailComponent,
+    BookFormComponent,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
