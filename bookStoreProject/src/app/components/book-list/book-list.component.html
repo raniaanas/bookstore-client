@@ -1,26 +1,43 @@
 <div class="container mx-auto p-6 bg-white rounded-lg shadow-lg">
   <!-- Section with Create New Book and Category Filter -->
-  <div class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+  <div
+    class="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0 md:space-x-4"
+  >
     <!-- Left: Create New Book Button -->
-    <a routerLink="/add-book" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
+    <a
+      routerLink="/add-book"
+      class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+    >
       + Create New Book
     </a>
 
     <!-- Right: Category Filter -->
     <div class="flex items-center space-x-4">
-      <label for="categoryFilter" class="font-semibold">Filter by Category:</label>
-      <select [(ngModel)]="selectedCategoryId" (change)="filterBooksByCategory()" class="border p-2 rounded">
+      <label for="categoryFilter" class="font-semibold"
+        >Filter by Category:</label
+      >
+      <select
+        [(ngModel)]="selectedCategoryId"
+        (change)="filterBooksByCategory()"
+        class="border p-2 rounded"
+      >
         <option [value]="null">All Categories</option>
-        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
       </select>
     </div>
   </div>
 
-
   <!-- Book List Table -->
-  <table class="min-w-full bg-white border rounded-lg shadow-md" *ngIf="filteredBooks.length > 0">
+  <table
+    class="min-w-full bg-white border rounded-lg shadow-md"
+    *ngIf="filteredBooks.length > 0"
+  >
     <thead>
-      <tr class="bg-gray-200 text-gray-600 text-left text-sm uppercase font-semibold tracking-wider">
+      <tr
+        class="bg-gray-200 text-gray-600 text-left text-sm uppercase font-semibold tracking-wider"
+      >
         <th class="px-6 py-3">No</th>
         <th class="px-6 py-3">Title</th>
         <th class="px-6 py-3">Author</th>
@@ -33,13 +50,28 @@
       <tr *ngFor="let book of filteredBooks; let i = index" class="border-b">
         <td class="px-6 py-4">{{ i + 1 }}</td>
         <td class="px-6 py-4">{{ book.title }}</td>
-        <td class="px-6 py-4">{{ book.author.name }}</td>
+        <td class="px-6 py-4">{{ book.authorName }}</td>
         <td class="px-6 py-4">{{ book.price | currency }}</td>
-        <td class="px-6 py-4">{{ book.publicationDate | date: 'shortDate' }}</td>
+        <td class="px-6 py-4">
+          {{ book.publicationDate | date : "shortDate" }}
+        </td>
         <td class="px-6 py-4 flex space-x-2">
-          <a routerLink="/book/{{ book.id }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Show</a>
-          <a routerLink="/edit-book/{{ book.id }}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</a>
-          <button (click)="deleteBook(book.id)" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+          <a
+            [routerLink]="['/book', book.id]"
+            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+            >Show</a
+          >
+          <a
+            [routerLink]="['/add-book', book.id]"
+            class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+            >Edit</a
+          >
+          <button
+            (click)="deleteBook(book.id)"
+            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+          >
+            Delete
+          </button>
         </td>
       </tr>
     </tbody>

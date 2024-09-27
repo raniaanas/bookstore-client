@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute  } from '@angular/router';  // Import Router and ActivatedRoute
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, ActivatedRoute  } from '@angular/router'; 
 import { BookService } from '../../services/book.service';
 import { Book } from '../../models/book';
 
+
 @Component({
   selector: 'app-book-detail',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.scss'],
 })
@@ -18,27 +15,38 @@ export class BookDetailComponent implements OnInit {
 
   constructor(
     private bookService: BookService,
-    private route: ActivatedRoute,   // To get the book ID from the route
-    private router: Router           // To navigate after deletion
+    private route: ActivatedRoute,   
+    private router: Router          
   ) { }
 
   ngOnInit(): void {
-    this.bookId = Number(this.route.snapshot.paramMap.get('id'));  // Get the book ID from the route
-    if (this.bookId) {
-      this.bookService.getBook(this.bookId).subscribe((book: Book) => {
-        this.book = book;
-      });
+    debugger;
+    console.log('111')
+    const bookId = this.route.snapshot.paramMap.get('id');
+    if (bookId) {
+      this.getBook(bookId);
     }
   }
 
-  deleteBook(id: number | undefined): void {
-    if (id) {
-      this.bookService.deleteBook(id).subscribe(() => {
-        console.log('Book deleted successfully');
-        this.router.navigate(['/']);  // Navigate back to the book list after deletion
-      }, (error) => {
-        console.error('Error deleting book:', error);
-      });
-    }
+  getBook(id: string): void {
+    this.bookService.getBook(+id).subscribe((data) => {
+      this.book = data;
+    }, (error) => {
+      console.error('Error fetching book:', error);
+      // Optionally navigate back or show a message
+      this.router.navigate(['/']);
+    });
+  }
+  
+
+  deleteBook(id: number): void {
+    this.bookService.deleteBook(id).subscribe(() => {
+      console.log('Book deleted successfully');
+      this.router.navigate(['/']);
+    }, (error) => {
+      console.error('Error deleting book:', error);
+    });
   }
 }
+
+ 

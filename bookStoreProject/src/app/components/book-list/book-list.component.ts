@@ -10,9 +10,9 @@ import { Category } from '../../models/category';
 })
 export class BookListComponent implements OnInit {
   books: Book[] = [];
-  filteredBooks: Book[] = [];  // Filtered list of books
-  categories: Category[] = []; // List of categories
-  selectedCategoryId: number | null = null;  // Selected category for filtering
+  filteredBooks: Book[] = []; 
+  categories: Category[] = []; 
+  selectedCategoryId: number | null = null;  
 
   constructor(private bookService: BookService, private categoryService: CategoryService) {}
 
@@ -21,12 +21,13 @@ export class BookListComponent implements OnInit {
     this.loadCategories();
   }
 
-  // Load all books
+
   loadBooks(): void {
     this.bookService.getBooks().subscribe(
       (data: Book[]) => {
         this.books = data;
-        this.filteredBooks = data;  // Initially, no filtering
+        this.filteredBooks = data; 
+        console.log(data);
       },
       (error) => {
         console.error('Error loading books', error);
@@ -34,7 +35,6 @@ export class BookListComponent implements OnInit {
     );
   }
 
-  // Load categories for the dropdown
   loadCategories(): void {
     this.categoryService.getCategories().subscribe(
       (data: Category[]) => {
@@ -46,20 +46,18 @@ export class BookListComponent implements OnInit {
     );
   }
 
-  // Filter books based on selected category
   filterBooksByCategory(): void {
     if (this.selectedCategoryId) {
-      this.filteredBooks = this.books.filter(book => book.category.id === this.selectedCategoryId);
+      this.filteredBooks = this.books.filter(book => book.categoryId === this.selectedCategoryId);
     } else {
-      this.filteredBooks = this.books;  // Show all books if no category is selected
+      this.filteredBooks = this.books;  
     }
   }
 
-  // Delete a book
   deleteBook(id: number): void {
     if (confirm('Are you sure you want to delete this book?')) {
       this.bookService.deleteBook(id).subscribe(() => {
-        this.loadBooks();  // Reload the book list after deletion
+        this.loadBooks();  
       });
     }
   }

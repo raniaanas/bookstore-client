@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router , ActivatedRoute} from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { AuthorService } from '../../services/author.service';
 import { CategoryService } from '../../services/category.service';
@@ -22,7 +22,8 @@ export class BookFormComponent implements OnInit {
     private bookService: BookService,
     private authorService: AuthorService,
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute 
   ) {
     this.bookForm = this.fb.group({
       title: ['', Validators.required],
@@ -35,6 +36,7 @@ export class BookFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAuthorsAndCategories();
+    this.checkForEditMode();
   }
 
   loadAuthorsAndCategories(): void {
@@ -47,6 +49,29 @@ export class BookFormComponent implements OnInit {
     });
   }
 
+  checkForEditMode(): void {
+    this.bookId = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.bookId) {
+      this.isEditMode = true;
+      this.getBook(this.bookId);
+    }
+  }
+
+  getBook(id: number): void {
+    this.bookService.getBook(id).subscribe((book) => {
+      console.log(book , 'Edit Book ')
+
+      const formattedDate = new Date(book.publicationDate).toISOString().split('T')[0]; // Convert to YYYY-MM-DD
+      this.bookForm.patchValue({
+        title: book.title,
+        price: book.price,
+        publicationDate: formattedDate,
+        authorId: book.authorId,  
+        categoryId: book.categoryId
+
+      }); 
+    });
+  }
   onSubmit(): void {
     if (this.bookForm.invalid) {
       return;
@@ -56,13 +81,13 @@ export class BookFormComponent implements OnInit {
     
     this.bookService.addBook(bookData).subscribe(
       () => {
-        this.router.navigate(['/']); // Navigate to the book list after adding
+        this.router.navigate(['/']);
       },
       (error) => console.error('Error adding book:', error)
     );
   }
-     // Method to handle the Back button click
+    
   onBack(): void {
-    this.router.navigate(['/']);  // Navigate back to the book list
+    this.router.navigate(['/']); 
   }
 }
