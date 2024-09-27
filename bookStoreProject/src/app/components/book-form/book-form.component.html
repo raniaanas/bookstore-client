@@ -1,65 +1,134 @@
 <div class="container mx-auto p-6 bg-white rounded-lg shadow-lg">
-  <h2 class="text-xl font-thin mb-4">{{ isEditMode ? 'Edit Book' : 'Add New Book' }}</h2>
-
+  <h2
+    class="text-xs sm:text-sm font-semibold px-3 py-2 text-white rounded-md w-full md:w-1/4"
+    [ngClass]="{
+      'bg-green-500': !isEditMode,
+      'bg-orange-500': isEditMode
+    }"
+  >
+    {{ isEditMode ? "Edit Book" : "Add Book" }}
+  </h2>
   <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
-    <!-- Title -->
-    <div class="mb-4">
-      <label for="title" class="block font-semibold">Title</label>
-      <input id="title" type="text" formControlName="title" class="border p-2 w-full rounded" placeholder="Book Title" />
-      <div *ngIf="bookForm.get('title')?.invalid && bookForm.get('title')?.touched" class="text-red-500 text-sm">
+    <!-- Tittle -->
+    <div class="mb-4 grid grid-cols-3 gap-2 items-center">
+      <label for="title" class="font-mono text-right mr-4">Title</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        class="border p-2 w-full rounded"
+        placeholder="Book Title"
+      />
+      <div
+        *ngIf="bookForm.get('title')?.invalid && bookForm.get('title')?.touched"
+        class="text-red-500 text-sm whitespace-nowrap"
+      >
         Title is required.
       </div>
     </div>
 
     <!-- Price -->
-    <div class="mb-4">
-      <label for="price" class="block font-semibold">Price</label>
-      <input id="price" type="number" formControlName="price" class="border p-2 w-full rounded" placeholder="Book Price" />
-      <div *ngIf="bookForm.get('price')?.invalid && bookForm.get('price')?.touched" class="text-red-500 text-sm">
+    <div class="mb-4 grid grid-cols-3 gap-2 items-center">
+      <label for="price" class="font-mono text-right mr-4">Price</label>
+      <input
+        id="price"
+        type="number"
+        formControlName="price"
+        class="border p-2 w-full rounded"
+        placeholder="Book Price"
+      />
+      <div
+        *ngIf="bookForm.get('price')?.invalid && bookForm.get('price')?.touched"
+        class="text-red-500 text-sm whitespace-nowrap"
+      >
         Price is required and must be a positive number.
       </div>
     </div>
 
-    <!-- Publication Date -->
-    <div class="mb-4">
-      <label for="publicationDate" class="block font-semibold">Publication Date</label>
-      <input id="publicationDate" type="date" formControlName="publicationDate" class="border p-2 w-full rounded" />
-      <div *ngIf="bookForm.get('publicationDate')?.invalid && bookForm.get('publicationDate')?.touched" class="text-red-500 text-sm">
-        Publication date is required.
-      </div>
-    </div>
-
     <!-- Author Select -->
-    <div class="mb-4">
-      <label for="authorId" class="block font-semibold">Author</label>
-      <select id="authorId" formControlName="authorId" class="border p-2 w-full rounded">
-        <option *ngFor="let author of authors" [value]="author.id">{{ author.name }}</option>
+    <div class="mb-4 grid grid-cols-3 gap-2 items-center">
+      <label for="authorId" class="font-mono text-right mr-4">Author</label>
+      <select
+        id="authorId"
+        formControlName="authorId"
+        class="border p-2 w-full rounded"
+      >
+        <option *ngFor="let author of authors" [value]="author.id">
+          {{ author.name }}
+        </option>
       </select>
-      <div *ngIf="bookForm.get('authorId')?.invalid && bookForm.get('authorId')?.touched" class="text-red-500 text-sm">
+      <div
+        *ngIf="
+          bookForm.get('authorId')?.invalid && bookForm.get('authorId')?.touched
+        "
+        class="text-red-500 text-sm whitespace-nowrap"
+      >
         Please select an author.
       </div>
     </div>
 
     <!-- Category Select -->
-    <div class="mb-4">
-      <label for="categoryId" class="block font-semibold">Category</label>
-      <select id="categoryId" formControlName="categoryId" class="border p-2 w-full rounded">
-        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+    <div class="mb-4 grid grid-cols-3 gap-2 items-center">
+      <label for="categoryId" class="font-mono text-right mr-4">Category</label>
+      <select
+        id="categoryId"
+        formControlName="categoryId"
+        class="border p-2 w-full rounded"
+      >
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
       </select>
-      <div *ngIf="bookForm.get('categoryId')?.invalid && bookForm.get('categoryId')?.touched" class="text-red-500 text-sm">
+      <div
+        *ngIf="
+          bookForm.get('categoryId')?.invalid &&
+          bookForm.get('categoryId')?.touched
+        "
+        class="text-red-500 text-sm whitespace-nowrap"
+      >
         Please select a category.
+      </div>
+    </div>
+
+    <!-- Publication Date -->
+    <div class="mb-4 grid grid-cols-3 gap-2 items-center">
+      <label for="publicationDate" class="font-mono text-right mr-4"
+        >Publication Date</label
+      >
+      <input
+        id="publicationDate"
+        type="date"
+        formControlName="publicationDate"
+        class="border p-2 w-full rounded"
+      />
+      <div
+        *ngIf="
+          bookForm.get('publicationDate')?.invalid &&
+          bookForm.get('publicationDate')?.touched
+        "
+        class="text-red-500 text-sm whitespace-nowrap"
+      >
+        Publication date is required.
       </div>
     </div>
 
     <div class="flex justify-center space-x-4 mt-8">
       <!-- Submit Button -->
-      <button type="submit" class="bg-blue-500 text-white px-5 py-3  rounded  hover:bg-blue-600" [disabled]="bookForm.invalid">
-        {{ isEditMode ? 'Update Book' : 'Add Book' }}
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-5 py-3 rounded hover:bg-blue-600"
+        [disabled]="bookForm.invalid"
+      >
+        {{ isEditMode ? "Update Book" : "Add Book" }}
       </button>
       <!-- Back Button -->
-      <button type="button" (click)="onBack()" class="bg-red-500 text-white px-8 py-3 ml-4  rounded hover:bg-gray-600">
+      <button
+        type="button"
+        (click)="onBack()"
+        class="bg-red-500 text-white px-8 py-3 ml-4 rounded hover:bg-gray-600"
+      >
         Back
       </button>
-  </div>
+    </div>
   </form>
 </div>
