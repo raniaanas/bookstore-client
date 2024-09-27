@@ -82,17 +82,17 @@ export class BookFormComponent implements OnInit {
     }
 
     const formData = this.bookForm.value;
-    
-    if (this.isEditMode) {
-      this.bookService.updateBook(this.bookId!, formData).subscribe(
-        () => this.router.navigate(['/']),
-        (error) => console.error(error)
-      );
-    } else {
-      this.bookService.addBook(formData).subscribe(
-        () => this.router.navigate(['/']),
-        (error) => console.error(error)
-      );
-    }
+  
+  if (this.isEditMode) {
+    this.bookService.updateBook(this.bookId!, formData).subscribe(
+      () => this.router.navigate(['/']),
+      (error: Error) => console.error(error)
+    );
+  } else {
+    this.bookService.addBook(formData).subscribe(
+      () => this.router.navigate(['/']),
+      (error: Error) => console.error(error)
+    );
   }
+}
 }

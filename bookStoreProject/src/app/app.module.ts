@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'; 
 import { CommonModule } from '@angular/common';
 
+import { AppRoutingModule } from './app.routes';
+import { HeaderComponent } from './components/header/header.component';
 import { AppComponent } from './app.component';
 import { BookListComponent } from './components/book-list/book-list.component';
 import { BookFormComponent } from './components/book-form/book-form.component';
@@ -16,7 +18,9 @@ import { FilterPipe } from './pipes/filter.pipe';
     AppComponent,
     BookListComponent,
     BookFormComponent,
-    FilterPipe
+    FilterPipe,
+    HeaderComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -25,6 +29,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     FormsModule,         
     ReactiveFormsModule, 
     RouterModule.forRoot([]),
+    AppRoutingModule,
   ],
   bootstrap: [AppComponent]
 })
