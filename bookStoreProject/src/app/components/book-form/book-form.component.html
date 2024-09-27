@@ -1,36 +1,85 @@
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-8">{{ isEditMode ? 'Edit Book' : 'Add New Book' }}</h1>
+<div class="container mx-auto py-8">
+  <h1 class="text-2xl font-bold mb-4">{{ isEditMode ? 'Edit Book' : 'Add Book' }}</h1>
 
-  <form (ngSubmit)="onSubmit()" #bookForm="ngForm" class="bg-white shadow-lg rounded-lg p-6">
+  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+    <!-- Title -->
     <div class="mb-4">
-      <label for="title" class="block text-gray-700 font-medium">Title</label>
-      <input type="text" id="title" name="title" [(ngModel)]="book.title" required
-             class="w-full border border-gray-300 p-2 rounded mt-2">
+      <label for="title" class="block text-lg font-semibold mb-2">Title</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        class="w-full p-2 border rounded"
+        placeholder="Enter book title"
+      />
+      <div *ngIf="bookForm.get('title')?.invalid && bookForm.get('title')?.touched" class="text-red-500 mt-2">
+        Title is required.
+      </div>
     </div>
 
+    <!-- Price -->
     <div class="mb-4">
-      <label for="author" class="block text-gray-700 font-medium">Author</label>
-      <input type="text" id="author" name="author" [(ngModel)]="book.author" required
-             class="w-full border border-gray-300 p-2 rounded mt-2">
+      <label for="price" class="block text-lg font-semibold mb-2">Price</label>
+      <input
+        type="number"
+        id="price"
+        formControlName="price"
+        class="w-full p-2 border rounded"
+        placeholder="Enter price"
+      />
+      <div *ngIf="bookForm.get('price')?.invalid && bookForm.get('price')?.touched" class="text-red-500 mt-2">
+        Price must be greater than zero.
+      </div>
     </div>
 
+    <!-- Publication Date -->
     <div class="mb-4">
-      <label for="price" class="block text-gray-700 font-medium">Price</label>
-      <input type="number" id="price" name="price" [(ngModel)]="book.price" required
-             class="w-full border border-gray-300 p-2 rounded mt-2">
+      <label for="publicationDate" class="block text-lg font-semibold mb-2">Publication Date</label>
+      <input
+        type="date"
+        id="publicationDate"
+        formControlName="publicationDate"
+        class="w-full p-2 border rounded"
+      />
+      <div *ngIf="bookForm.get('publicationDate')?.invalid && bookForm.get('publicationDate')?.touched" class="text-red-500 mt-2">
+        Publication Date is required.
+      </div>
     </div>
 
+    <!-- Author -->
     <div class="mb-4">
-      <label for="publicationDate" class="block text-gray-700 font-medium">Publication Date</label>
-      <input type="date" id="publicationDate" name="publicationDate" [(ngModel)]="book.publicationDate"
-             class="w-full border border-gray-300 p-2 rounded mt-2">
+      <label for="authorId" class="block text-lg font-semibold mb-2">Author</label>
+      <select id="authorId" formControlName="authorId" class="w-full p-2 border rounded">
+        <option value="">Select Author</option>
+        <option *ngFor="let author of authors" [value]="author.id">{{ author.name }}</option>
+      </select>
+      <div *ngIf="bookForm.get('authorId')?.invalid && bookForm.get('authorId')?.touched" class="text-red-500 mt-2">
+        Author is required.
+      </div>
     </div>
 
-    <div class="flex space-x-4">
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+    <!-- Category -->
+    <div class="mb-4">
+      <label for="categoryId" class="block text-lg font-semibold mb-2">Category</label>
+      <select id="categoryId" formControlName="categoryId" class="w-full p-2 border rounded">
+        <option value="">Select Category</option>
+        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+      </select>
+      <div *ngIf="bookForm.get('categoryId')?.invalid && bookForm.get('categoryId')?.touched" class="text-red-500 mt-2">
+        Category is required.
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-between mt-6">
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        [disabled]="bookForm.invalid"
+      >
         {{ isEditMode ? 'Update Book' : 'Add Book' }}
       </button>
-      <a routerLink="/" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 cursor-pointer text-cente ">Back</a>
+      <a routerLink="/" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cancel</a>
     </div>
   </form>
 </div>

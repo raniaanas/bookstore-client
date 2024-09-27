@@ -1,34 +1,30 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
-import { routes } from './app.routes';
+import { RouterModule } from '@angular/router';  
+import { FormsModule } from '@angular/forms'; 
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'; 
+import { CommonModule } from '@angular/common';
 
-// Import standalone components
+import { AppComponent } from './app.component';
 import { BookListComponent } from './components/book-list/book-list.component';
-import { BookDetailComponent } from './components/book-detail/book-detail.component';
 import { BookFormComponent } from './components/book-form/book-form.component';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { FilterPipe } from './pipes/filter.pipe';  
 
 @NgModule({
   declarations: [
-    AppComponent,  // AppComponent is not standalone, so it stays in declarations
+    AppComponent,
+    BookListComponent,
+    BookFormComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot(routes),
-
-    // Import standalone components here
-    BookListComponent,
-    BookDetailComponent,
-    BookFormComponent,
-  ],
-  providers: [
-    provideAnimationsAsync()
+    CommonModule, 
+    FormsModule,         
+    ReactiveFormsModule, 
+    RouterModule.forRoot([]),
   ],
   bootstrap: [AppComponent]
 })

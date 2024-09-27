@@ -1,34 +1,98 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';  // Import FormsModule for ngModel and forms
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { BookService } from '../../services/book.service';
+import { AuthorService } from '../../services/author.service';
+import { CategoryService } from '../../services/category.service';
 import { Book } from '../../models/book';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-book-form',
-  standalone: true,
-  imports: [CommonModule, FormsModule , RouterModule],  // Import FormsModule here
   templateUrl: './book-form.component.html',
-  styleUrls: ['./book-form.component.scss'],
 })
 export class BookFormComponent implements OnInit {
-  book: Book = {
-    id: 0,
-    title: '',
-    author: '',
-    price: 0,
-    publicationDate: new Date(),
-  };
-  isEditMode: boolean = false;
+  bookForm: FormGroup;
+  authors: any[] = [];
+  categories: any[] = [];
+  isEditMode = false;
+  bookId: number | null = null;
 
-  constructor(private bookService: BookService) { }
+  constructor(
+    private bookService: BookService,
+    private authorService: AuthorService,
+    private categoryService: CategoryService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.bookForm = this.fb.group({
+      title: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
+      publicationDate: ['', Validators.required],
+      authorId: ['', Validators.required],
+      categoryId: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
-    // Logic for initializing book data or handling edit mode
+    const bookIdStr = this.route.snapshot.paramMap.get('id');
+          
+    this.bookId = bookIdStr ? +bookIdStr : null;
+    this.bookForm = this.fb.group({
+      title: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
+      publicationDate: ['', Validators.required],
+      authorId: ['', Validators.required],
+      categoryId: ['', Validators.required],
+    });
+
+    this.loadAuthorsAndCategories();
+
+    if (this.bookId) {
+      this.isEditMode = true;
+      this.loadBookDetails(this.bookId);
+    }
+  }
+
+  loadAuthorsAndCategories(): void {
+    this.authorService.getAuthors().subscribe((authors) => {
+      this.authors = authors;
+    });
+
+    this.categoryService.getCategories().subscribe((categories) => {
+      this.categories = categories;
+    });
+  }
+
+  loadBookDetails(bookId: number): void {
+    this.bookService.getBook(bookId).subscribe((book) => {
+      this.bookForm.patchValue({
+        title: book.title,
+        price: book.price,
+        publicationDate: book.publicationDate ? new Date(book.publicationDate).toISOString().substring(0, 10) : null,
+        authorId: book.author ? book.author.id : null,
+        categoryId: book.category ? book.category.id : null,
+      });
+    });
   }
 
   onSubmit(): void {
-    // Submit form logic
+    if (this.bookForm.invalid) {
+      return;
+    }
+
+    const formData = this.bookForm.value;
+    
+    if (this.isEditMode) {
+      this.bookService.updateBook(this.bookId!, formData).subscribe(
+        () => this.router.navigate(['/']),
+        (error) => console.error(error)
+      );
+    } else {
+      this.bookService.addBook(formData).subscribe(
+        () => this.router.navigate(['/']),
+        (error) => console.error(error)
+      );
+    }
   }
 }
