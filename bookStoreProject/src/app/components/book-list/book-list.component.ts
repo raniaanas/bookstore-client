@@ -72,52 +72,69 @@ export class BookListComponent implements OnInit, AfterViewInit {
   }
 
 
-  filterBooksByCategory(): void {
-    console.log('Selected Category ID:', this.selectedCategoryId);
-  
-    const selectedCategoryIdNumber = Number(this.selectedCategoryId);  // Explicitly cast to number
-  
-    if (selectedCategoryIdNumber === null || isNaN(selectedCategoryIdNumber)) {
-      console.log('No category selected, showing all books.');
-      this.filteredBooks = this.books;
-    } else {
-      // Find the selected category's name by ID
-      const selectedCategory = this.categories.find(
-        (category) => category.id === selectedCategoryIdNumber  // Make sure the types are aligned
-      );
-  
-      if (selectedCategory) {
-        const selectedCategoryName = selectedCategory.name;
-        console.log('Selected Category Name:', selectedCategoryName);
-  
-        // Now filter books by categoryName
-        this.filteredBooks = this.books.filter((book) => {
-          console.log(`Filtering Book Title: ${book.title}, Book Category: ${book.categoryName}, Selected Category: ${selectedCategoryName}`);
-          return book.categoryName === selectedCategoryName;
-        });
-  
-        console.log('Filtered Books:', this.filteredBooks);
-      } else {
-        console.warn('No matching category found for the selected category ID.');
+filterBooksByCategory(): void {
+  console.log('Selected Category ID:', this.selectedCategoryId);
+
+  const selectedCategoryIdNumber = Number(this.selectedCategoryId);  // Explicitly cast to number
+
+  if (selectedCategoryIdNumber === null || isNaN(selectedCategoryIdNumber)) {
+    console.log('No category selected, showing all books.');
+    this.filteredBooks = this.books;
+  } else {
+    // Find the selected category's name by ID
+    const selectedCategory = this.categories.find(
+      (category) => category.id === selectedCategoryIdNumber  // Ensure type consistency
+    );
+
+    if (selectedCategory) {
+      const selectedCategoryName = selectedCategory.name;
+      console.log('Selected Category Name:', selectedCategoryName);
+
+      // Now filter books by categoryName
+      this.filteredBooks = this.books.filter((book) => {
+        console.log(`Filtering Book Title: ${book.title}, Book Category: ${book.categoryName}, Selected Category: ${selectedCategoryName}`);
+        return book.categoryName === selectedCategoryName;
+      });
+
+      console.log('Filtered Books:', this.filteredBooks);
+
+      // If no books match the category, set filteredBooks to empty
+      if (this.filteredBooks.length === 0) {
+        console.log('No books found for the selected category.');
+        this.filteredBooks = [];
       }
+    } else {
+      console.warn('No matching category found for the selected category ID.');
     }
-  
-    // Reset the paginator after filtering
-    this.paginator.firstPage();
-    this.setPaginatedBooks();
   }
-  
-  
+
+  // Reset paginator and update paginated books
+  this.paginator.firstPage();  // Reset to the first page
+  this.setPaginatedBooks();
+}
+
 
   setPaginatedBooks(): void {
-    if (this.paginator && this.filteredBooks.length) {
+    // Check if there are filtered books
+    if (this.filteredBooks.length === 0) {
+      this.paginatedBooks = [];
+      console.log('No books available to display.');
+      // Reset the paginator to 0 length if no books are available
+      this.paginator.length = 0;
+    } else {
+      // Paginate the books
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       const endIndex = startIndex + this.paginator.pageSize;
       this.paginatedBooks = this.filteredBooks.slice(startIndex, endIndex);
   
-      this.cdr.markForCheck();  // Trigger change detection after updating data
+      // Set paginator length to the total number of filtered books
+      this.paginator.length = this.filteredBooks.length;
     }
+  
+    // Trigger change detection to update the view
+    this.cdr.markForCheck();
   }
+  
 
   onPageChange(event: any): void {
     this.paginator.pageIndex = event.pageIndex;
