@@ -13,7 +13,7 @@ export class BookService {
   private apiUrl = `${environment.apiUrl}/books`; 
 
   constructor(private http: HttpClient) {}
-
+  
   getBooks(): Observable<Book[]> {
     return this.http.get<Book[]>(this.apiUrl).pipe(
       catchError(this.handleError) // Use handleError to catch errors
@@ -39,8 +39,8 @@ export class BookService {
   }
 
   deleteBook(id: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/delete`, { isDeleted: true }).pipe(
-      catchError(this.handleError) // Use handleError to catch errors
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.handleError)
     );
   }
 
