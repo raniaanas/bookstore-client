@@ -13,14 +13,8 @@
 
     <!-- Right: Category Filter -->
     <div class="flex items-center space-x-4">
-      <label for="categoryFilter" class="font-semibold"
-        >Filter by Category:</label
-      >
-      <select
-        [(ngModel)]="selectedCategoryId"
-        (change)="filterBooksByCategory()"
-        class="border p-2 rounded"
-      >
+      <label for="categoryFilter" class="font-semibold">Filter by Category:</label>
+      <select [(ngModel)]="selectedCategoryId" (change)="filterBooksByCategory()" class="border p-2 rounded">
         <option [value]="null">All Categories</option>
         <option *ngFor="let category of categories" [value]="category.id">
           {{ category.name }}
@@ -30,50 +24,59 @@
   </div>
 
   <!-- Book List Table -->
-  <table
-    class="min-w-full bg-white border rounded-lg shadow-md"
-    *ngIf="filteredBooks.length > 0"
-  >
-    <thead>
-      <tr
-        class="bg-gray-200 text-gray-600 text-left text-sm uppercase font-semibold tracking-wider"
-      >
-        <th class="px-6 py-3">No</th>
-        <th class="px-6 py-3">Title</th>
-        <th class="px-6 py-3">Author</th>
-        <th class="px-6 py-3">Price</th>
-        <th class="px-6 py-3">Publication Date</th>
-        <th class="px-6 py-3">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let book of filteredBooks; let i = index" class="border-b">
-        <td class="px-6 py-4">{{ i + 1 }}</td>
-        <td class="px-6 py-4">{{ book.title }}</td>
-        <td class="px-6 py-4">{{ book.authorName }}</td>
-        <td class="px-6 py-4">{{ book.price | currency }}</td>
-        <td class="px-6 py-4">
-          {{ book.publicationDate | date : "shortDate" }}
-        </td>
-        <td class="px-6 py-4 flex space-x-2">
-          <a
-            [routerLink]="['/book', book.id]"
-            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-            >Show</a
-          >
-          <a
-            [routerLink]="['/add-book', book.id]"
-            class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-            >Edit</a
-          >
-          <button
-            (click)="deleteBook(book.id)"
-            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
+  <table mat-table [dataSource]="paginatedBooks" class="mat-elevation-z8">
+
+    <!-- No Column -->
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>No</th>
+      <td mat-cell *matCellDef="let book; let i = index">{{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}</td>
+    </ng-container>
+
+    <!-- Title Column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let book">{{ book.title }}</td>
+    </ng-container>
+
+    <!-- Author Column -->
+    <ng-container matColumnDef="author">
+      <th mat-header-cell *matHeaderCellDef>Author</th>
+      <td mat-cell *matCellDef="let book">{{ book.authorName }}</td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let book">{{ book.price | currency }}</td>
+    </ng-container>
+
+    <!-- Publication Date Column -->
+    <ng-container matColumnDef="publicationDate">
+      <th mat-header-cell *matHeaderCellDef>Publication Date</th>
+      <td mat-cell *matCellDef="let book">{{ book.publicationDate | date: 'shortDate' }}</td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let book">
+        <a [routerLink]="['/book', book.id]" class="bg-blue button">Show</a>
+
+        <a [routerLink]="['/add-book', book.id]" class="bg-yellow button">Edit</a>
+
+
+        <button (click)="deleteBook(book.id)" class="bg-red button">Delete</button>
+      </td>
+    </ng-container>
+
+    <!-- Header Row -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <!-- Data Rows -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+
+  <!-- Paginator -->
+  <mat-paginator [length]="filteredBooks.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" (page)="onPageChange($event)">
+  </mat-paginator>
 </div>

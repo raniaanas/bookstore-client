@@ -1,0 +1,56 @@
+/* Base button styles */
+button, a.button {
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    padding: 10px 20px; /* Padding inside the button */
+    margin: 10px 5px;   /* Margin outside the button */
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+  }
+  
+  /* Button Colors */
+  .bg-green {
+    background-color: #28a745;  /* Green button */
+    color: white;
+  }
+  
+  .bg-green:hover {
+    background-color: #218838;  /* Darker green on hover */
+    transform: translateY(-2px); /* Slightly lift the button */
+  }
+  
+  .bg-blue {
+    background-color: #007bff;   /* Blue button */
+    color: white;
+  }
+  
+  .bg-blue:hover {
+    background-color: #0056b3;   /* Darker blue on hover */
+    transform: translateY(-2px); /* Slightly lift the button */
+  }
+  
+  .bg-yellow {
+    background-color: #ffc107;   /* Yellow button */
+    color: black;
+  }
+  
+  .bg-yellow:hover {
+    background-color: #e0a800;   /* Darker yellow on hover */
+    transform: translateY(-2px); /* Slightly lift the button */
+  }
+  
+  .bg-red {
+    background-color: #dc3545;   /* Red button */
+    color: white;
+  }
+  
+  .bg-red:hover {
+    background-color: #c82333;   /* Darker red on hover */
+    transform: translateY(-2px); /* Slightly lift the button */
+  }
+  

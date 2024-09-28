@@ -1,0 +1,9 @@
+.snackbar-success {
+    background-color: #4caf50 !important; /* Green background for success */
+    color: black !important;              /* White text for contrast */
+  }
+  .snackbar-error {
+    background-color: #f44336 !important; 
+    color: white !important;             
+  }
+ 

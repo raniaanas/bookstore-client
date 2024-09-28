@@ -4,11 +4,13 @@ import { Router , ActivatedRoute} from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { AuthorService } from '../../services/author.service';
 import { CategoryService } from '../../services/category.service';
+import { MatSnackBar } from '@angular/material/snack-bar'; 
 import { Book } from '../../models/book';
 
 @Component({
   selector: 'app-book-form',
   templateUrl: './book-form.component.html',
+  styleUrls: ['./book-form.component.css'],
 })
 export class BookFormComponent implements OnInit {
   bookForm: FormGroup;
@@ -23,7 +25,9 @@ export class BookFormComponent implements OnInit {
     private authorService: AuthorService,
     private categoryService: CategoryService,
     private router: Router,
-    private route: ActivatedRoute 
+    private route: ActivatedRoute ,
+    private snackBar: MatSnackBar
+
   ) {
     this.bookForm = this.fb.group({
       title: ['', Validators.required],
@@ -81,9 +85,19 @@ export class BookFormComponent implements OnInit {
     
     this.bookService.addBook(bookData).subscribe(
       () => {
+        this.snackBar.open('Book added successfully!', 'Close', {
+          duration: 3000, 
+          panelClass: ['snackbar-success'] 
+        });
         this.router.navigate(['/']);
       },
-      (error) => console.error('Error adding book:', error)
+      (error) => {
+        this.snackBar.open('Error adding book. Please try again!', 'Close', {
+          duration: 3000, 
+          panelClass: ['snackbar-error'] 
+        });
+        console.error('Error adding book:', error);
+      }  
     );
   }
     

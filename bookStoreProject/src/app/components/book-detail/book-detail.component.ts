@@ -20,7 +20,6 @@ export class BookDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    debugger;
     console.log('111')
     const bookId = this.route.snapshot.paramMap.get('id');
     if (bookId) {
