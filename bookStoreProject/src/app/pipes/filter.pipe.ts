@@ -4,12 +4,24 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'filter',
 })
 export class FilterPipe implements PipeTransform {
-  transform(items: any[], searchTerm: string): any[] {
-    if (!items || !searchTerm) {
-      return items;
+  transform(items: any[], searchTerm: string, selectedCategoryId: number | null): any[] {
+    if (!items) {
+      return [];
     }
-    return items.filter(item =>
-      item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+
+    // If there's a search term, filter by title
+    let filteredItems = items;
+    if (searchTerm) {
+      filteredItems = filteredItems.filter(item =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // If there's a selected category, filter by category
+    if (selectedCategoryId !== null) {
+      filteredItems = filteredItems.filter(item => item.categoryId === selectedCategoryId);
+    }
+
+    return filteredItems;
   }
 }

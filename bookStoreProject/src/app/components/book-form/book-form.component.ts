@@ -63,19 +63,26 @@ export class BookFormComponent implements OnInit {
 
   getBook(id: number): void {
     this.bookService.getBook(id).subscribe((book) => {
-      console.log(book , 'Edit Book ')
-
-      const formattedDate = new Date(book.publicationDate).toISOString().split('T')[0]; // Convert to YYYY-MM-DD
+      console.log(book, 'Edit Book ');
+  
+      // Convert the publication date to local date without timezone shift
+      const publicationDate = new Date(book.publicationDate);
+      const localDate = new Date(publicationDate.getTime() + Math.abs(publicationDate.getTimezoneOffset() * 60000));
+  
+      // Format the date as YYYY-MM-DD
+      const formattedDate = localDate.toISOString().split('T')[0];
+  
+      // Patch the form with the book data
       this.bookForm.patchValue({
         title: book.title,
         price: book.price,
-        publicationDate: formattedDate,
-        authorId: book.authorId,  
+        publicationDate: formattedDate,  // Corrected date
+        authorId: book.authorId,
         categoryId: book.categoryId
-
-      }); 
+      });
     });
   }
+  
   onSubmit(): void {
     if (this.bookForm.invalid) {
       return;

@@ -9,7 +9,7 @@
     <!-- Right: Category Filter -->
     <div class="flex items-center space-x-4">
       <label for="categoryFilter" class="font-semibold">Filter by Category:</label>
-      <select [(ngModel)]="selectedCategoryId" (change)="filterBooksByCategory()" class="border p-2 rounded">
+      <select [(ngModel)]="selectedCategoryId" (ngModelChange)="filterBooksByCategory()" class="border p-2 rounded">
         <option [value]="null">All Categories</option>
         <option *ngFor="let category of categories" [value]="category.id">
           {{ category.name }}
