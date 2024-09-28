@@ -80,27 +80,50 @@ export class BookFormComponent implements OnInit {
     if (this.bookForm.invalid) {
       return;
     }
-
+  
     const bookData = this.bookForm.value;
-    
-    this.bookService.addBook(bookData).subscribe(
-      () => {
-        this.snackBar.open('Book added successfully!', 'Close', {
-          duration: 3000, 
-          panelClass: ['snackbar-success'] 
-        });
-        this.router.navigate(['/']);
-      },
-      (error) => {
-        this.snackBar.open('Error adding book. Please try again!', 'Close', {
-          duration: 3000, 
-          panelClass: ['snackbar-error'] 
-        });
-        console.error('Error adding book:', error);
-      }  
-    );
+  
+    if (this.isEditMode && this.bookId) {
+      // Include the bookId in the book object before sending it to the API
+      const updatedBook = { ...bookData, id: this.bookId };
+      
+      this.bookService.updateBook(this.bookId, updatedBook).subscribe(
+        () => {
+          this.snackBar.open('Book updated successfully!', 'Close', {
+            duration: 3000, 
+            panelClass: ['snackbar-success'] 
+          });
+          this.router.navigate(['/']);
+        },
+        (error) => {
+          this.snackBar.open('Error updating book. Please try again!', 'Close', {
+            duration: 3000, 
+            panelClass: ['snackbar-error'] 
+          });
+          console.error('Error updating book:', error);
+        }
+      );
+    } else {
+      // Add new book
+      this.bookService.addBook(bookData).subscribe(
+        () => {
+          this.snackBar.open('Book added successfully!', 'Close', {
+            duration: 3000, 
+            panelClass: ['snackbar-success'] 
+          });
+          this.router.navigate(['/']);
+        },
+        (error) => {
+          this.snackBar.open('Error adding book. Please try again!', 'Close', {
+            duration: 3000, 
+            panelClass: ['snackbar-error'] 
+          });
+          console.error('Error adding book:', error);
+        }
+      );
+    }
   }
-    
+  
   onBack(): void {
     this.router.navigate(['/']); 
   }
